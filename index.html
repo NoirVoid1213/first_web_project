@@ -1,11 +1,291 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>个人主页</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人主页与项目卡片</title>
+    <!-- 基础 CSS 美化区域 -->
+    <style>
+        /* 1. 全局设置：字体、背景色 */
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* 柔和渐变背景 */
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* 2. 主容器 */
+        .container {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* 3. 个人资料卡片 */
+        .profile-card {
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 顶部装饰条 */
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #4f46e5, #0ea5e9); /* 主题渐变色 */
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #e0e7ff;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            font-size: 26px;
+            margin: 0 0 10px 0;
+            color: #1f2937;
+        }
+
+        .intro {
+            font-size: 15px;
+            color: #4b5563;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+        }
+
+        .interests {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .tag {
+            background-color: #e0e7ff;
+            color: #4338ca;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .link-btn {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #4f46e5;
+            color: #ffffff;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        .link-btn:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        /* 4. Project Idea Card */
+        .idea-card {
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+        }
+
+        .idea-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed #e5e7eb;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .idea-header h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #1f2937;
+        }
+
+        .project-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #4f46e5;
+            background: #e0e7ff;
+            padding: 6px 16px;
+            border-radius: 8px;
+        }
+
+        /* 两列布局 */
+        .idea-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .q-item {
+            background: #f9fafb;
+            padding: 18px;
+            border-radius: 12px;
+            border-left: 4px solid #4f46e5;
+            transition: background 0.2s;
+        }
+        .q-item:hover {
+            background: #f3f4f6;
+        }
+
+        .q-title {
+            font-weight: bold;
+            color: #374151;
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .q-title span {
+            background: #4f46e5;
+            color: #fff;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .q-content {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* 响应式设计：手机端变为单列 */
+        @media (max-width: 768px) {
+            .idea-grid {
+                grid-template-columns: 1fr;
+            }
+            .profile-card, .idea-card {
+                padding: 25px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>hello</h1>
-    <p>world</p>
+
+<div class="container">
+    <!-- ================= 1. 个人主页部分 ================= -->
+    <div class="profile-card">
+        <!-- 请替换为你自己的图片链接 -->
+        < img class="avatar" src="https://via.placeholder.com/150" alt="个人头像">
+        
+        <h1>李华 / Li Hua</h1>
+        
+        <p class="intro">
+            上海外国语大学大一学生。热爱观察生活，喜欢用技术解决身边的小问题，目前正在探索数据与人文的交叉领域。
+        </p >
+        
+        <div class="interests">
+            <span class="tag">Python 爬虫</span>
+            <span class="tag">数据可视化</span>
+            <span class="tag">校园生活</span>
+            <span class="tag">摄影</span>
+        </div>
+        
+        <!-- 请替换为你自己的GitHub或其他主页链接 -->
+        <a href=" " target="_blank" class="link-btn">访问我的 GitHub →</a >
+    </div>
+
+    <!-- ================= 2. Project Idea Card 部分 ================= -->
+    <div class="idea-card">
+        <div class="idea-header">
+            <h2>Project Idea Card</h2>
+            <span class="project-name">项目名称：CampusFlow - 校园资源避挤指南</span>
+        </div>
+
+        <div class="idea-grid">
+            <!-- ① -->
+            <div class="q-item">
+                <div class="q-title"><span>①</span> 我发现的问题是什么？</div>
+                <p class="q-content">校园资源（如图文信息楼座位、食堂拥挤度、空闲自习室）信息不透明，导致大量时间浪费在排队和找座位上。</p >
+            </div>
+
+            <!-- ② -->
+            <div class="q-item">
+                <div class="q-title"><span>②</span> 谁会遇到这个问题？</div>
+                <p class="q-content">在校大学生、需要找地方备课的老师，尤其是赶时间上早八或复习周的同学。</p >
+            </div>
+
+            <!-- ③ -->
+            <div class="q-item">
+                <div class="q-title"><span>③</span> 可以获得哪些数据？</div>
+                <p class="q-content">图书馆座位预约数据、食堂刷卡时间记录、教务系统的空教室课表、校园论坛的实时吐槽帖。</p >
+            </div>
+
+            <!-- ④ -->
+            <div class="q-item">
+                <div class="q-title"><span>④</span> 我希望从数据中发现什么？</div>
+                <p class="q-content">校园人流的时空规律（如周几几点哪个食堂人最少），哪些空教室全天利用率低，最佳自习路线。</p >
+            </div>
+
+            <!-- ⑤ -->
+            <div class="q-item">
+                <div class="q-title"><span>⑤</span> AI 可以做什么？</div>
+                <p class="q-content">基于历史数据预测未来一小时的人群拥堵情况；用NLP提取校园论坛中的“避雷”信息，自动生成每日校园日报。</p >
+            </div>
+
+            <!-- ⑥ -->
+            <div class="q-item">
+                <div class="q-title"><span>⑥</span> 最终想做成什么？</div>
+                <p class="q-content">一个“校园生活避挤指南”轻量级小程序或网页，附带实时热力图和智能推荐。</p >
+            </div>
+
+            <!-- ⑦ -->
+            <div class="q-item">
+                <div class="q-title"><span>⑦</span> 我现在已经会什么？</div>
+                <p class="q-content">基础 Python 爬虫、Excel 数据清洗、基础前端页面搭建（HTML/CSS/JS）。</p >
+            </div>
+
+            <!-- ⑧ -->
+            <div class="q-item">
+                <div class="q-title"><span>⑧</span> 我目前还不会什么？</div>
+                <p class="q-content">时序数据预测模型，实时数据流的接入，小程序的云开发。</p >
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
